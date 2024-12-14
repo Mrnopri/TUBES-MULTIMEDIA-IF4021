@@ -26,6 +26,15 @@ Proyek ini dirancang untuk berbagai kebutuhan, seperti hiburan, pelatihan olahra
 - **Python**: Bahasa utama untuk pengembangan aplikasi.  
 - **OpenCV**: Untuk pemrosesan video real-time dan menampilkan pose target.  
 - **Mediapipe**: Untuk mendeteksi dan melacak pose tubuh secara akurat.  
+- **Tensorflow**: Untuk tujuan yang lebih umum dalam pengolahan gambar dan video
 
 ## Tujuan Proyek  
 Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan bermanfaat, baik untuk hiburan, edukasi, maupun pelatihan fisik berbasis teknologi.  
+
+## Untuk Penginstallan 
+- **Python**: Download Python dari situs resmi python.org dan ikuti petunjuk instalasi.
+Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python --version di terminal atau command prompt.
+- **OpenCV** : pip install opencv-python ditermminal
+- **Mediapipe** : pip install mediapipe
+- **Tensorflow** : pip install tensorflow
+note : jika terjadi error dalam penginstallan `ERROR: Could not install packages due to an OSError: Could not find a suitable TLS CA certificate bundle, invalid path:` bisa mencoba dengan `pip install mediapipe tensorflow --trusted-host pypi.org --trusted-host files.pythonhosted.org`
