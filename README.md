@@ -34,7 +34,7 @@ Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan be
 ## Untuk Penginstallan 
 - **Python**: Download Python dari situs resmi python.org dan ikuti petunjuk instalasi.
 Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python --version di terminal atau command prompt.
-- **OpenCV** : pip install opencv-python ditermminal
+- **OpenCV** : pip install opencv-python diterminal
 - **Mediapipe** : pip install mediapipe
 - **Tensorflow** : pip install tensorflow
 
