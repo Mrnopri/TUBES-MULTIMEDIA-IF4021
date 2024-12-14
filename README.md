@@ -37,4 +37,5 @@ Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python 
 - **OpenCV** : pip install opencv-python ditermminal
 - **Mediapipe** : pip install mediapipe
 - **Tensorflow** : pip install tensorflow
+
 note : jika terjadi error dalam penginstallan `ERROR: Could not install packages due to an OSError: Could not find a suitable TLS CA certificate bundle, invalid path:` bisa mencoba dengan `pip install mediapipe tensorflow --trusted-host pypi.org --trusted-host files.pythonhosted.org`
