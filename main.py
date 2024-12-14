@@ -17,7 +17,7 @@ def compare_poses(user_landmarks, target_landmarks):
         return False
     
     # Ambil hanya beberapa landmark kunci (misalnya: bahu, siku, lutut)
-    key_indices = [11, 12, 13, 14, 23, 24]  # Contoh: bahu, siku, pinggul, lutut
+    key_indices = [11, 12, 13, 14, 23, 24]  #bahu, siku, pinggul, lutut
     threshold = 0.1  # Toleransi perbedaan posisi
     
     for idx in key_indices:
