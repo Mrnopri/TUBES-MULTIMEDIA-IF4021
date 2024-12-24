@@ -1,140 +1,133 @@
 import cv2
 import mediapipe as mp
-import random
+import pickle
 import os
-import math
+import random
 import time
-
-# Menonaktifkan log TensorFlow
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import feature_extractor
 
 # Inisialisasi Mediapipe
-mp_pose = mp.solutions.pose
-mp_drawing = mp.solutions.drawing_utils
-pose = mp_pose.Pose()
-
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-# Fungsi untuk menghitung jarak Euclidean antara dua titik
+# Fungsi untuk menghitung jarak Euclidean
 def euclidean_distance(p1, p2):
-    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+    return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
 
-# Fungsi untuk mendeteksi apakah mulut terbuka
-def is_mouth_open(landmarks):
-    upper_lip = landmarks[13]  # Bibir atas
-    lower_lip = landmarks[14]  # Bibir bawah
-    distance = euclidean_distance((upper_lip.x, upper_lip.y), (lower_lip.x, lower_lip.y))
-    threshold = 0.02
-    return distance > threshold
-
-# Fungsi untuk membandingkan pose pengguna dengan pose target dengan presisi
-def compare_poses(user_landmarks, target_landmarks):
-    if not user_landmarks or not target_landmarks:
-        return False
-
-    key_indices = [11, 12, 13, 14, 23, 24]  # Bahu, siku, pinggul
-    threshold = 0.05  # Toleransi presisi lebih kecil
-
-    for idx in key_indices:
-        user_point = user_landmarks[idx]
-        target_point = target_landmarks[idx]
-        if abs(user_point.x - target_point.x) > threshold or abs(user_point.y - target_point.y) > threshold:
-            return False
+# Fungsi untuk membandingkan fitur
+def compare_features(user_features, target_features):
+    threshold = 0.03
+    for user_feature in user_features:
+        for key in user_feature:
+            if abs(user_feature[key] - target_features[key]) > threshold:
+                return False
     return True
 
-# Fungsi untuk animasi perandoman gambar di area kanan atas
-def randomize_images_on_frame(frame, folder_path, duration=5, interval=0.1):
+# Fungsi untuk merandom gambar
+def randomize_image(folder_path):
     image_files = [f for f in os.listdir(folder_path) if f.endswith(('jpg', 'jpeg', 'png'))]
     if not image_files:
         print("Folder tidak mengandung file gambar.")
         return None
-
-    start_time = time.time()
-    selected_image = None
-    h, w, _ = frame.shape
-
-    while time.time() - start_time < duration:
-        selected_image = random.choice(image_files)
-        image_path = os.path.join(folder_path, selected_image)
-        image = cv2.imread(image_path)
-        resized_image = cv2.resize(image, (200, 200))
-        frame[0:200, w-200:w] = resized_image  # Gambar di pojok kanan atas
-        cv2.imshow("Random Pose Filter", frame)
-
-        if cv2.waitKey(int(interval * 1000)) & 0xFF == ord('q'):
-            break
-
+    selected_image = random.choice(image_files)
     return os.path.join(folder_path, selected_image)
 
 # Fungsi utama
-def random_pose_filter(target_folder):
-    if not os.path.exists(target_folder):
-        print(f"Folder {target_folder} tidak ditemukan!")
+def main():
+    # Load fitur target dari file pickle
+    if not os.path.exists("features.pkl"):
+        print("File features.pkl tidak ditemukan. Jalankan pickle.py terlebih dahulu untuk menyimpan fitur target.")
         return
 
+    with open("features.pkl", "rb") as f:
+        target_features = pickle.load(f)
+
+    # Folder tempat gambar pose
+    target_folder = r"D:\\Dingko\\TUBES-MULTIMEDIA-IF4021\\poses"
+    
     cap = cv2.VideoCapture(0)
-
-    success, frame = cap.read()
-    if not success:
+    if not cap.isOpened():
         print("Gagal membuka kamera!")
-        cap.release()
         return
 
-    # Animasi perandoman gambar di pojok kanan atas
-    selected_image_path = randomize_images_on_frame(frame, target_folder, duration=2, interval=0.2)
-    if not selected_image_path:
-        print("Gagal memilih gambar target.")
-        cap.release()
+    # Ambil semua file gambar dari folder
+    image_files = [os.path.join(target_folder, f) for f in os.listdir(target_folder) if f.endswith(('jpg', 'jpeg', 'png'))]
+    if not image_files:
+        print("Folder poses kosong atau tidak ada file gambar.")
         return
 
-    target_image = cv2.imread(selected_image_path)
-    if target_image is None:
-        print(f"Gagal membaca gambar: {selected_image_path}")
-        cap.release()
-        return
-
-    # Proses target pose
-    target_image_rgb = cv2.cvtColor(target_image, cv2.COLOR_BGR2RGB)
-    target_pose_result = pose.process(target_image_rgb)
-    target_landmarks = target_pose_result.pose_landmarks.landmark if target_pose_result.pose_landmarks else None
-    target_image = cv2.resize(target_image, (200, 200))
+    selected_image_path = None
+    animation_start_time = time.time()
+    animation_duration = 5  # Durasi animasi (detik)
 
     while cap.isOpened():
-        success, frame = cap.read()
-        if not success:
+        ret, frame = cap.read()
+        if not ret:
             break
 
         frame = cv2.flip(frame, 1)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # Proses pose dan wajah pengguna
-        result = pose.process(frame_rgb)
-        user_landmarks = result.pose_landmarks.landmark if result.pose_landmarks else None
+        # Animasi acak gambar selama 5 detik pertama
+        current_time = time.time()
+        if current_time - animation_start_time < animation_duration:
+            random_image_path = random.choice(image_files)
+            target_image = cv2.imread(random_image_path)
+            selected_image_path = random_image_path  # Tetapkan gambar terakhir setelah animasi selesai
+        elif selected_image_path:
+            target_image = cv2.imread(selected_image_path)
+
+        if target_image is not None:
+            target_image_resized = cv2.resize(target_image, (200, 200))
+
+        # Proses face mesh untuk pengguna
         face_results = face_mesh.process(frame_rgb)
+        user_features = []
 
-        # Tempelkan gambar target di pojok kanan atas
-        frame[0:200, -200:] = target_image
-
-        if result.pose_landmarks:
-            mp_drawing.draw_landmarks(frame, result.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
-        # Periksa kecocokan pose
-        if compare_poses(user_landmarks, target_landmarks):
-            cv2.putText(frame, "Match!", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        else:
-            cv2.putText(frame, "Not Match", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-        # Periksa status mulut dari Face Mesh
         if face_results.multi_face_landmarks:
             for face_landmarks in face_results.multi_face_landmarks:
-                mp_drawing.draw_landmarks(frame, face_landmarks, mp_face_mesh.FACEMESH_CONTOURS)
-                if is_mouth_open(face_landmarks.landmark):
-                    cv2.putText(frame, "Mouth Open", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                else:
-                    cv2.putText(frame, "Mouth Closed", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                user_feature = {}
+                landmarks = face_landmarks.landmark
 
-        cv2.imshow("Random Pose Filter", frame)
+                # Jarak mata
+                left_eye_top = landmarks[386]
+                left_eye_bottom = landmarks[374]
+                right_eye_top = landmarks[159]
+                right_eye_bottom = landmarks[145]
+
+                user_feature['left_eye'] = euclidean_distance(
+                    (left_eye_top.x, left_eye_top.y),
+                    (left_eye_bottom.x, left_eye_bottom.y)
+                )
+                user_feature['right_eye'] = euclidean_distance(
+                    (right_eye_top.x, right_eye_top.y),
+                    (right_eye_bottom.x, right_eye_bottom.y)
+                )
+
+                # Jarak mulut
+                upper_lip = landmarks[13]
+                lower_lip = landmarks[14]
+                user_feature['mouth'] = euclidean_distance(
+                    (upper_lip.x, upper_lip.y),
+                    (lower_lip.x, lower_lip.y)
+                )
+
+                user_features.append(user_feature)
+
+        # Bandingkan fitur pengguna dengan target
+        if user_features and selected_image_path:
+            match = compare_features(user_features, target_features[0])
+            if match:
+                cv2.putText(frame, "Pose Matched!", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            else:
+                cv2.putText(frame, "Pose Not Matched!", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        # Tempelkan gambar target di pojok kanan atas
+        if target_image is not None:
+            h, w, _ = frame.shape
+            frame[0:200, w-200:w] = target_image_resized
+
+        cv2.imshow("Pose Matching", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -142,6 +135,5 @@ def random_pose_filter(target_folder):
     cap.release()
     cv2.destroyAllWindows()
 
-# Jalankan program
-target_folder = r"D:\\Dingko\\TUBES-MULTIMEDIA-IF4021\\poses"
-random_pose_filter(target_folder)
+if __name__ == "__main__":
+    main()
