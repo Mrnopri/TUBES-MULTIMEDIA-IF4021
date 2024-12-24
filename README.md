@@ -32,11 +32,11 @@ Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan be
 ## Logbook  
 | No | Tanggal          | Progress                                |
 |----|------------------|-----------------------------------------|
-| 1  | 14 Desember 2024 | Menentukan Judul Tugas Besar            |
+| 1  | 14 Desember 2024 | Update program yang telah dikerjakan            |
 | 2  | 17 Desember 2024 | Menentukan Pembagian Tugas              |
 | 3  | 20 Desember 2024 | Pembuatan Program beserta format laporan|
-| 4  | 21 Desember 2024 | Memperbaiki program yang masih mengalami bug |
-| 5  | 25 Desember 2024 | Pengumpulan Tugas Besar                |
+| 4  | 23 Desember 2024 | Update program untuk randomize foto dan testing |
+| 5  | 24 Desember 2024 | Update final program yang telah diperbaiki                |
 
 ## Untuk Penginstallan 
 - **Python**: Download Python dari situs resmi python.org dan ikuti petunjuk instalasi.
@@ -46,7 +46,7 @@ Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python 
 - **Tensorflow** : pip install tensorflow
 
 ## Cara Menggunakan Filter
-- Jalankan ekstrai fitur dengan yaitu file bernama "faeture_extractor.py"
+- Jalankan ekstrai fitur dengan yaitu file bernama "feature_extractor.py"
 - Kemudian jalankan file utama yaiut file bernama "main.py"
 
 note : jika terjadi error dalam penginstallan `ERROR: Could not install packages due to an OSError: Could not find a suitable TLS CA certificate bundle, invalid path:` bisa mencoba dengan `pip install mediapipe tensorflow --trusted-host pypi.org --trusted-host files.pythonhosted.org`
