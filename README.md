@@ -12,13 +12,11 @@
 ## Deskripsi Proyek  
 Proyek ini bertujuan untuk mengembangkan filter gaya foto random menggunakan Python, OpenCV, dan Mediapipe. Filter ini memungkinkan pengguna untuk meniru pose atau gaya yang ditampilkan secara acak di layar secara real-time.  
 
-Dengan bantuan teknologi pose detection dari Mediapipe, aplikasi ini dapat melacak pergerakan tubuh pengguna dan membandingkannya dengan pose target untuk memastikan kesesuaian. Jika gaya yang dilakukan pengguna sesuai dengan pose target, aplikasi akan memberikan umpan balik berupa notifikasi "Match!" di layar.  
-
-Proyek ini dirancang untuk berbagai kebutuhan, seperti hiburan, pelatihan olahraga, atau pengajaran gerakan tubuh secara interaktif.  
+Dengan bantuan teknologi pose detection dari Mediapipe, aplikasi ini dapat melacak pergerakan tubuh pengguna dan membandingkannya dengan pose target untuk memastikan kesesuaian. Jika gaya yang dilakukan pengguna sesuai dengan pose target, aplikasi akan memberikan umpan balik berupa notifikasi "Pose Matched!" di layar.  
 
 ## Fitur Utama  
 - **Pose Acak**: Menampilkan pose atau gaya secara acak untuk ditiru pengguna.  
-- **Pelacakan Real-Time**: Melacak gerakan tubuh pengguna dengan akurasi tinggi menggunakan Mediapipe.  
+- **Pelacakan Real-Time**: Melacak ekspresi wajah pengguna dengan menggunakan Mediapipe.  
 - **Umpan Balik Visual**: Memberikan notifikasi langsung jika pose pengguna sesuai dengan target.  
 - **Pengalaman Interaktif**: Antarmuka sederhana dan responsif menggunakan live camera feed.  
 
@@ -29,7 +27,7 @@ Proyek ini dirancang untuk berbagai kebutuhan, seperti hiburan, pelatihan olahra
 - **Tensorflow**: Untuk tujuan yang lebih umum dalam pengolahan gambar dan video
 
 ## Tujuan Proyek  
-Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan bermanfaat, baik untuk hiburan, edukasi, maupun pelatihan fisik berbasis teknologi.  
+Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan bermanfaat.
 
 ## Logbook  
 | No | Tanggal          | Progress                                |
@@ -46,5 +44,9 @@ Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python 
 - **OpenCV** : pip install opencv-python diterminal
 - **Mediapipe** : pip install mediapipe
 - **Tensorflow** : pip install tensorflow
+
+## Cara Menggunakan Filter
+- Jalankan ekstrai fitur dengan yaitu file bernama "faeture_extractor.py"
+- Kemudian jalankan file utama yaiut file bernama "main.py"
 
 note : jika terjadi error dalam penginstallan `ERROR: Could not install packages due to an OSError: Could not find a suitable TLS CA certificate bundle, invalid path:` bisa mencoba dengan `pip install mediapipe tensorflow --trusted-host pypi.org --trusted-host files.pythonhosted.org`
