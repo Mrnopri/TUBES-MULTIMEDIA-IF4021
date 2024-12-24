@@ -31,6 +31,15 @@ Proyek ini dirancang untuk berbagai kebutuhan, seperti hiburan, pelatihan olahra
 ## Tujuan Proyek  
 Proyek ini bertujuan untuk menciptakan aplikasi interaktif yang menghibur dan bermanfaat, baik untuk hiburan, edukasi, maupun pelatihan fisik berbasis teknologi.  
 
+## Logbook  
+| No | Tanggal          | Progress                                |
+|----|------------------|-----------------------------------------|
+| 1  | 14 Desember 2024 | Menentukan Judul Tugas Besar            |
+| 2  | 17 Desember 2024 | Menentukan Pembagian Tugas              |
+| 3  | 20 Desember 2024 | Pembuatan Program beserta format laporan|
+| 4  | 21 Desember 2024 | Memperbaiki program yang masih mengalami bug |
+| 5  | 25 Desember 2024 | Pengumpulan Tugas Besar                |
+
 ## Untuk Penginstallan 
 - **Python**: Download Python dari situs resmi python.org dan ikuti petunjuk instalasi.
 Setelah instalasi, pastikan Python terinstal dengan menjalankan perintah python --version di terminal atau command prompt.
