@@ -70,5 +70,5 @@ def save_target_features(target_folder):
 
 # Jalankan proses penyimpanan
 if __name__ == "__main__":
-    target_folder = os.path.join(os.getcwd(), 'TUBES-MULTIMEDIA-IF4021' ,'poses')
+    target_folder = os.path.join(os.getcwd() ,'poses')
     save_target_features(target_folder)

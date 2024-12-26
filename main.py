@@ -43,7 +43,7 @@ def main():
         target_features = pickle.load(f)
 
     # Folder tempat gambar pose
-    target_folder = os.path.join(os.getcwd(), 'TUBES-MULTIMEDIA-IF4021' ,'poses')
+    target_folder = os.path.join(os.getcwd() ,'poses')
     
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
